@@ -16,7 +16,7 @@ Afin de faciliter la prise en main de ce projet, merci d'utiliser les deux proje
 Voici les étapes à suivre pour faciliter la gestion du repository GitHub de ce projet.
 - `Cloner` le projet dans votre espace personnel.
 - Créer une branche pour la partie du projet que vous développez
-- `Merge` une fois qu'une bibliothèque constituée de fichier .c et .h a été réalisée.
+- `Merge` une fois qu'une bibliothèque constituée de fichier `.c` et `.h` a été réalisée.
 
 Un tutoriel plus détaillé pour créer un fichier `.c` et `.h` est disponible ci-dessous.
 
@@ -24,7 +24,7 @@ Un tutoriel plus détaillé pour créer un fichier `.c` et `.h` est disponible c
 Une libairie est composé d'une fichier `.c` (programme) et d'un fichier `.h` (fichier d'en tête/header).
 Afin de créer correctement des librairies de fichier il est conseillé de respecter la mise en forme suivante
 
-### Création du fichier .h   
+### Création du fichier `.h`   
 
 Ce fichier contient deux informations primordiales cités ci-dessous. Par ailleurs son nom doit **être identique** à celui du fichier `.c` qui lui est associé.
 - Le prototype des fonctions
