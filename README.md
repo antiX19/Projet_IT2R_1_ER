@@ -2,7 +2,7 @@
 Projet d'IT2R du groupe 1 (année 2022).
 
 ### Utilisation de ce repository GitHub
-Afin de faciliter la prise en main de ce projet, merci d'utiliser les deux fichiers vierge puis de développer votre programme dessus.
+Afin de faciliter la prise en main de ce projet, merci d'utiliser les deux projets µVision vierges puis de développer votre programme dessus.
 Etapes à suivre pour faciliter la gestion du repository github.
 - `Cloner` le projet dans votre espace personnel.
 - Créer une branche pour la partie du projet que vous développez
