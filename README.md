@@ -35,7 +35,7 @@ Ce fichier contient deux informations primordiales cités ci-dessous. Par ailleu
 ```#define nb_cote_carre 4```
 
 Le fichier `.h` doit impérativemet commencer et finir par les lignes suivantes. Sans rentrer dans les détails du pourquoi nous allons supposer que nous créons la librairie `clignotants` qui sera dérivée en deux fichiers `clignotants.c` et `clignotants.h`
-Il sera alors nécessaire de commencer le fichier `clignotants.h` par la ligne suivante :
+Il sera alors nécessaire de commencer et finir le fichier `clignotants.h` comme présenté ci dessous.
 ```
 #ifndef _clignotants_h_
 #define _clignotants_h_
