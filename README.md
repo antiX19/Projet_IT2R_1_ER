@@ -1,5 +1,15 @@
 # IT2R_1_Projet_ER
-Projet d'IT2R du groupe 1 (année 2022).
+Projet d'IT2R du groupe 1 de l'année 2022. Projet de véhicule réunissant et mettant en oeuvre les options disponibles sur la plupart des véhicules actuels.
+Cahier des charges imposé : 
+- [ ] Analyse de l'environnement
+- [ ] Avertissement sonore
+- [ ] Détection d'obstacles
+- [ ] Position GPS sur une carte de l'IUT
+- [ ] Allumage automatique des feux
+- [ ] Pilotage wireless
+- [ ] IHM, supervision du véhicule
+- [ ] Aide au stationnement
+- [ ] Ouverture des portes par TAG RFID
 
 ## Utilisation de ce repository GitHub  
 Afin de faciliter la prise en main de ce projet, merci d'utiliser les deux projets µVision vierges puis de développer votre programme dessus.  
