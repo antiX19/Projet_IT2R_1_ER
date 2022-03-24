@@ -64,8 +64,8 @@ Ce fichier contient le corps des fonctions. Il est **impératif** de commencer c
 #include clignotants.h
 
 int allume_clignotant_gauche(void){
-  //Cors du programme 
+  //Corps de la fonction 
   //...
-  //fin du programme
+  //...
 }
 ```
