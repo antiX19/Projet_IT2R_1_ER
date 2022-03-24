@@ -8,7 +8,7 @@ Voici les étapes à suivre pour faciliter la gestion du repository GitHub de ce
 - Créer une branche pour la partie du projet que vous développez
 - `Merge` une fois qu'une bibliothèque constituée de fichier .c et .h a été réalisée.
 
-Un tutoriel plus détaillé pour créer un fichier .c et .h est disponible ci-dessous.
+Un tutoriel plus détaillé pour créer un fichier `.c` et `.h` est disponible ci-dessous.
 
 ### Création d'une libairie  
 Une libairie est composé d'une fichier `.c` (programme) et d'un fichier `.h` (fichier d'en tête/header).
