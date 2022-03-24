@@ -57,7 +57,7 @@ Plus généralement on appliquera cette convention avec `nom_du_fichier.c` et `n
 #endif
 ```
 
-### Création d'un fichier `.c`
+### Création d'un fichier `.c` associé
 
 Ce fichier contient le corps des fonctions. Il est **impératif** de commencer ce fichier en intégrant le fichier `.h` qui lui est associé. Par ailleurs ce fichier doit avoir le même nom que le fichier `.h` associé. **Seul l'extension varie entre les deux !**
 ```
