@@ -14,7 +14,7 @@ Un tutoriel plus détaillé pour créer un fichier `.c` et `.h` est disponible c
 Une libairie est composé d'une fichier `.c` (programme) et d'un fichier `.h` (fichier d'en tête/header).
 Afin de créer correctement des librairies de fichier il est conseillé de respecter la mise en forme suivante
 
-1. Création du fichier .h   
+### Création du fichier .h   
 
 Ce fichier contient deux informations primordiales cités ci-dessous. Par ailleurs son nom doit **être identique** à celui du fichier `.c` qui lui est associé.
 - Le prototype des fonctions
@@ -47,7 +47,7 @@ Plus généralement on appliquera cette convention avec `nom_du_fichier.c` et `n
 #endif
 ```
 
-2. Créatioon d'un fichier `.c`
+### Créatioon d'un fichier `.c`
 
 Ce fichier contient le corps des fonctions. Il est **impératif** de commencer ce fichier en intégrant le fichier `.h` qui lui est associé. Par ailleurs ce fichier doit avoir le même nom que le fichier `.h` associé. **Seul l'extension varie entre les deux !**
 ```
