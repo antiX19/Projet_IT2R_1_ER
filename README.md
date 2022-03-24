@@ -1,7 +1,7 @@
 # IT2R_1_Projet_ER
 Projet d'IT2R du groupe 1 (année 2022).
 
-### Utilisation de ce repository GitHub  
+## Utilisation de ce repository GitHub  
 Afin de faciliter la prise en main de ce projet, merci d'utiliser les deux projets µVision vierges puis de développer votre programme dessus.  
 Voici les étapes à suivre pour faciliter la gestion du repository GitHub de ce projet.
 - `Cloner` le projet dans votre espace personnel.
@@ -10,15 +10,18 @@ Voici les étapes à suivre pour faciliter la gestion du repository GitHub de ce
 
 Un tutoriel plus détaillé pour créer un fichier `.c` et `.h` est disponible ci-dessous.
 
-### Création d'une libairie  
+## Création d'une libairie  
 Une libairie est composé d'une fichier `.c` (programme) et d'un fichier `.h` (fichier d'en tête/header).
 Afin de créer correctement des librairies de fichier il est conseillé de respecter la mise en forme suivante
 
 1. Création du fichier .h   
+
 Ce fichier contient deux informations primordiales cités ci-dessous. Par ailleurs son nom doit **être identique** à celui du fichier `.c` qui lui est associé.
 - Le prototype des fonctions
+
 ```int getNunchuckData(void);```
 - Les variables constantes
+
 ```#define nb_cote_carre 4```
 
 Le fichier `.h` doit impérativemet commencer et finir par les lignes suivantes. Sans rentrer dans les détails du pourquoi nous allons supposer que nous créons la librairie `clignotants` qui sera dérivée en deux fichiers `clignotants.c` et `clignotants.h`
@@ -46,7 +49,7 @@ Plus généralement on appliquera cette convention avec `nom_du_fichier.c` et `n
 
 2. Créatioon d'un fichier `.c`
 
-Ce fichier contient le corps des fonctions. Il est **impératif** de commencer ce fichier en intégrant le fichier `.h` qui lui est associé
+Ce fichier contient le corps des fonctions. Il est **impératif** de commencer ce fichier en intégrant le fichier `.h` qui lui est associé. Par ailleurs ce fichier doit avoir le même nom que le fichier `.h` associé. **Seul l'extension varie entre les deux !**
 ```
 #include clignotants.h
 
