@@ -46,7 +46,6 @@ Plus généralement on appliquera cette convention avec `nom_du_fichier.c` et `n
 
 2. Créatioon d'un fichier `.c`
 
-
 Ce fichier contient le corps des fonctions. Il est **impératif** de commencer ce fichier en intégrant le fichier `.h` qui lui est associé
 ```
 #include clignotants.h
