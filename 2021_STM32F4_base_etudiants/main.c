@@ -41,7 +41,18 @@
 #include "main.h"
 #include "Board_LED.h"                  // ::Board Support:LED
 #include "Driver_SPI.h"
+#include "stm32f4xx_hal.h"
+
 extern ARM_DRIVER_SPI Driver_SPI1;
+
+void Configure_GPIO(void);
+void configure_ADC2_Channel_1(void);
+void Delay_ms(volatile int time_ms);
+ADC_HandleTypeDef myADC2Handle;
+
+uint32_t Adc_value;
+float voltage;
+
 void Init_SPI(void)
 	  {
 		Driver_SPI1.Initialize(NULL);
@@ -60,57 +71,110 @@ void Init_SPI(void)
   * @param  None
   * @retval None
   */
+
+	  
 int main(void)
 {
-  int i, nb_led, k;
-	
-  char tab[22+18];
+  
+  int i, nb_led;
+  char tab[22+24];
   Init_SPI();
-
+  
   /* Add your application code here
      */
+	Configure_GPIO(); // initialize PA0 pin 
+	configure_ADC2_Channel_1(); // configure ADC2
 	LED_Initialize();
 
-  
-
-	for(i=0;i<4;i++){
-		tab[i] = 0;
-	}
-	
-	tab[4]=0xff;
-	tab[5]=0x00;
-	tab[6]=0x00;
-	tab[7]=0xff;
-	
-	for (i=8;i<12;i++){
-		tab[i] = 0xff;	
-	}	
-		
-//	// 4 LED bleues
-//		for (nb_led = 0; nb_led <4;nb_led++){
-//			tab[4+nb_led*4]=0xff;
-//			tab[5+nb_led*4]=0xff;
-//			tab[6+nb_led*4]=0x00;
-//			tab[7+nb_led*4]=0x00;
-//			}
-
-//	// 4 LED rouges
-//		for (nb_led = 0; nb_led <4;nb_led++){
-//			tab[20+nb_led*4]=0xff;
-//			tab[21+nb_led*4]=0x00;
-//			tab[22+nb_led*4]=0x00;
-//			tab[23+nb_led*4]=0x00;
-//			}
-//	
-//		for (i=36;i<40;i++){
-//		tab[i] = 0xff;
-		
-  
   while(1){
+		
+		HAL_ADC_Start(&myADC2Handle); // start A/D conversion
+	  
+	  	if(HAL_ADC_PollForConversion(&myADC2Handle, 5) == HAL_OK) //check if conversion is completed
+			{
+			Adc_value  = HAL_ADC_GetValue(&myADC2Handle); // read digital value and save it inside uint32_t variable
+			voltage = (Adc_value * 8 ) / 10000;
+			}
+			
+		HAL_ADC_Stop(&myADC2Handle); // stop conversion 
+		Delay_ms(200);
+			
+			
+		//start
+		for (i=0;i<4;i++)
+			{
+			tab[i] = 0;
+			}
 	
-		Driver_SPI1.Send(tab,12);
-		for (k=0; k<100000;k++)
-	  {
-	  }
+		// 4 LED jaunes
+		for (nb_led = 0; nb_led <4;nb_led++)
+			{
+				tab[4+nb_led*4]=0xff;
+				tab[5+nb_led*4]=0x00;
+				tab[6+nb_led*4]=0x0E;
+				tab[7+nb_led*4]=0x0E;
+			}
+
+		// feu de position
+		if( voltage < 2.5)
+			{
+			for (nb_led = 0; nb_led <4;nb_led++)
+				{
+					tab[4+nb_led*4]=0xff;
+					tab[5+nb_led*4]=0x00;
+					tab[6+nb_led*4]=0xff;
+					tab[7+nb_led*4]=0xff;
+				}
+			}
+		// plein phares
+		for (nb_led = 0; nb_led <6;nb_led++){
+			tab[20+nb_led*4]=0xff;
+			tab[21+nb_led*4]=0x00;
+			tab[22+nb_led*4]=0x3f;
+			tab[23+nb_led*4]=0xff;
+			}
+	
+		// end
+		tab[45] = 0;
+		tab[44] = 0;
+		
+		//envoie de la trame
+		Driver_SPI1.Send(tab,46);
+	    
   }
+}
+
+/* Configure and initialize PA1 pin as analog input pin for A/D conversion */
+void Configure_GPIO(void)
+{
+	GPIO_InitTypeDef ADCpin; //create an instance of GPIO_InitTypeDef C struct
+	__HAL_RCC_GPIOA_CLK_ENABLE(); // enable clock to GPIOA
+	ADCpin.Pin = GPIO_PIN_0; // Select pin PA1
+	ADCpin.Mode = GPIO_MODE_ANALOG; // Select Analog Mode
+	ADCpin.Pull = GPIO_NOPULL; // Disable internal pull-up or pull-down resistor
+	HAL_GPIO_Init(GPIOA, &ADCpin); // initialize PA1 as analog input pin
+}
+void configure_ADC2_Channel_1(void)
+{
+	ADC_ChannelConfTypeDef Channel_AN0; // create an instance of ADC_ChannelConfTypeDef
+__HAL_RCC_ADC2_CLK_ENABLE(); // enable clock to ADC2 module
+	myADC2Handle.Instance = ADC2; // create an instance of ADC2
+	myADC2Handle.Init.Resolution = ADC_RESOLUTION_12B; // select 12-bit resolution 
+	myADC2Handle.Init.EOCSelection = ADC_EOC_SINGLE_CONV; //select  single conversion as a end of conversion event
+	myADC2Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT; // set digital output data right justified
+	myADC2Handle.Init.ClockPrescaler =ADC_CLOCK_SYNC_PCLK_DIV8; 
+	HAL_ADC_Init(&myADC2Handle); // initialize AD2 with myADC2Handle configuration settings
+	
+  /*select ADC2 channel */
+	
+	Channel_AN0.Channel = ADC_CHANNEL_0; // select analog channel 0
+	Channel_AN0.Rank = 1; // set rank to 1
+	Channel_AN0.SamplingTime = ADC_SAMPLETIME_15CYCLES; // set sampling time to 15 clock cycles
+	HAL_ADC_ConfigChannel(&myADC2Handle, &Channel_AN0); // select channel_0 for ADC2 module. 
+}
+void Delay_ms(volatile int time_ms)
+{
+	      int j;
+        for(j = 0; j < time_ms*4000; j++)
+            {}  /* excute NOP for 1ms */		
 }
