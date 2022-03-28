@@ -1,0 +1,92 @@
+#include "LPC17xx.h"                    // Device header
+#include "GPIO_LPC17xx.h"               // Keil::Device:GPIO
+#include "Driver_USART.h"               // ::CMSIS Driver:USART
+#include "Board_GLCD.h"                 // ::Board Support:Graphic LCD
+#include "Driver_SPI.h"                 // ::CMSIS Driver:SPI
+#include "stdio.h"
+#include "LIDAR.h"
+#include "GPIO.h"
+
+
+#define VITESSE_LIDAR 600;
+
+
+
+extern ARM_DRIVER_USART Driver_USART1;
+extern GLCD_FONT GLCD_Font_6x8;
+extern GLCD_FONT GLCD_Font_16x24;
+
+int TRAME_START = 0x20 ;
+int TRAME_STOP = 0x25 ;
+int TRAME_RESET = 0x40 ;
+int PRE_TRAME = 0xA5 ;
+bool etatled = 0;
+char value[5000];
+int counter = 0;
+char process1[4][360];
+int qualite;
+int ANGLE_MESURE = 0 ;
+int ANGLE_VISEE = 1;
+int add = 0;
+
+void reception_trame(void);
+
+char text[50];
+int i=0,y=0;
+int turn = 0;
+int angle;
+int distance;
+
+
+
+int main(void){
+	
+	
+	Init_UART1();
+	initPwm();
+	GLCD_Initialize();
+	GLCD_ClearScreen();
+	Initialise_GPIO();
+	GLCD_SetFont(&GLCD_Font_16x24);
+	
+	LPC_PWM1->MR3 = VITESSE_LIDAR; // ceci ajuste la duree de l'état haut
+
+	delay(100000000);
+	
+	Start_LIDAR();
+	
+	Driver_USART1.Receive(value,5000);
+	while(Driver_USART1.GetRxCount()<5000);
+	
+	Stop_LIDAR();
+		
+	for(y=0;y<1000;y++){
+		counter = y*5;
+		//sprintf(text,"value = %x       ",value[counter]);
+		//GLCD_DrawString(10,20,text);
+	
+		angle=(arrayToAngle(value[counter + 1],value[counter +2]))/64;
+		distance=(arrayToRange(value[counter + 3],value[ counter + 4]))/40;
+		qualite = value[counter]>>2;
+		process1[0][angle] = qualite;
+		process1[1][angle] = angle;
+		process1[2][angle] += distance;
+		process1[3][angle]++;
+		
+	}
+		while(ANGLE_MESURE == 0){
+			if((process1[2][ANGLE_VISEE+add]!= 0) & (process1[0][ANGLE_VISEE + add] >= 7)){ANGLE_MESURE = ANGLE_VISEE + add;}
+			else{add++;}
+			
+		}
+		
+		sprintf(text,"distance = %d       ",(process1[2][ANGLE_MESURE])/process1[3][ANGLE_MESURE]);
+		GLCD_DrawString(10,140,text);
+		sprintf(text,"angle = %d       ",ANGLE_MESURE);
+		GLCD_DrawString(10,160,text);
+	
+		
+	
+		return 0;
+	
+	}	

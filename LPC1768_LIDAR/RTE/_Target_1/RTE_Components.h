@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'Projet_keil_LPC1768' 
+ * Project: 'LIDAR' 
  * Target:  'Target 1' 
  */
 

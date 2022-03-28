@@ -1,3 +1,4 @@
+
 /* -----------------------------------------------------------------------------
  * Copyright (c) 2013-2016 ARM Ltd.
  *
@@ -315,7 +316,7 @@
 
 //   <o> UART0_TX Pin <0=>Not used <1=>P0_2
 //   <i> UART0 Serial Output pin
-#define RTE_UART0_TX_ID                 0
+#define RTE_UART0_TX_ID                 1
 #if    (RTE_UART0_TX_ID == 0)
 #define RTE_UART0_TX_PIN_EN             0
 #elif  (RTE_UART0_TX_ID == 1)
@@ -331,7 +332,7 @@
 
 //   <o> UART0_RX Pin <0=>Not used <1=>P0_3
 //   <i> UART0 Serial Input pin
-#define RTE_UART0_RX_ID                 0
+#define RTE_UART0_RX_ID                 1
 #if    (RTE_UART0_RX_ID == 0)
 #define RTE_UART0_RX_PIN_EN             0
 #elif  (RTE_UART0_RX_ID == 1)
@@ -794,7 +795,7 @@
 
 //     <o> SSP0_MISO <0=>Not used <1=>P0_17 <2=>P1_23
 //     <i> Master In Slave Out for SSP0
-#define   RTE_SSP0_MISO_PIN_SEL         0
+#define   RTE_SSP0_MISO_PIN_SEL         1
 #if      (RTE_SSP0_MISO_PIN_SEL == 0)
   #define RTE_SSP0_MISO_PIN_EN          0
 #elif    (RTE_SSP0_MISO_PIN_SEL == 1)
@@ -814,7 +815,7 @@
 
 //     <o> SSP0_MOSI <0=>Not used <1=>P0_18 <2=>P1_24
 //     <i> Master Out Slave In for SSP0
-#define   RTE_SSP0_MOSI_PIN_SEL         0
+#define   RTE_SSP0_MOSI_PIN_SEL         1
 #if      (RTE_SSP0_MOSI_PIN_SEL == 0)
   #define RTE_SSP0_MOSI_PIN_EN          0
 #elif    (RTE_SSP0_MOSI_PIN_SEL == 1)
