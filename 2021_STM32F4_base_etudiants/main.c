@@ -38,7 +38,6 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "Board_LED.h"                  // ::Board Support:LED
 #include "Driver_SPI.h"
 #include "stm32f4xx_hal.h"
@@ -48,10 +47,12 @@ extern ARM_DRIVER_SPI Driver_SPI1;
 void Configure_GPIO(void);
 void configure_ADC2_Channel_1(void);
 void Delay_ms(volatile int time_ms);
+void clignogauche(void);
+void clignodroit(void);
+void phare (void);
 ADC_HandleTypeDef myADC2Handle;
 
-uint32_t Adc_value;
-float voltage;
+char tab[22+24];
 
 void Init_SPI(void)
 	  {
@@ -77,17 +78,40 @@ int main(void)
 {
   
   int i, nb_led;
-  char tab[22+24];
+  
   Init_SPI();
   
-  /* Add your application code here
-     */
 	Configure_GPIO(); // initialize PA0 pin 
 	configure_ADC2_Channel_1(); // configure ADC2
 	LED_Initialize();
 
   while(1){
 		
+		for (i=0;i<4;i++)
+			{
+			tab[i] = 0;
+			}
+	
+		phare();
+		clignogauche ();	
+		clignodroit ();
+		
+		// end
+		tab[44] = 0;
+		tab[45] = 0;
+		
+		//envoie de la trame
+		Driver_SPI1.Send(tab,46);
+	    
+  }
+}
+
+void phare (void)
+		{
+		uint32_t Adc_value;
+		float voltage;
+		int nb_led;
+			
 		HAL_ADC_Start(&myADC2Handle); // start A/D conversion
 	  
 	  	if(HAL_ADC_PollForConversion(&myADC2Handle, 5) == HAL_OK) //check if conversion is completed
@@ -98,15 +122,8 @@ int main(void)
 			
 		HAL_ADC_Stop(&myADC2Handle); // stop conversion 
 		Delay_ms(200);
-			
-			
-		//start
-		for (i=0;i<4;i++)
-			{
-			tab[i] = 0;
-			}
-	
-		// 4 LED jaunes
+		
+		
 		for (nb_led = 0; nb_led <4;nb_led++)
 			{
 				tab[4+nb_led*4]=0xff;
@@ -115,36 +132,57 @@ int main(void)
 				tab[7+nb_led*4]=0x0E;
 			}
 
-		// feu de position
 		if( voltage < 2.5)
-			{
-			for (nb_led = 0; nb_led <4;nb_led++)
+		{
+		for (nb_led = 0; nb_led <4;nb_led++)
 				{
 					tab[4+nb_led*4]=0xff;
 					tab[5+nb_led*4]=0x00;
 					tab[6+nb_led*4]=0xff;
 					tab[7+nb_led*4]=0xff;
 				}
+			}	
+		}
+void clignogauche(void)
+		{
+		int nb_led;
+        
+			
+		for (nb_led = 0; nb_led <3;nb_led++){
+			tab[20+nb_led*4]=0xff;
+			tab[21+nb_led*4]=0x00;
+			tab[22+nb_led*4]=0x00;
+			tab[23+nb_led*4]=0x00;
 			}
-		// plein phares
-		for (nb_led = 0; nb_led <6;nb_led++){
+		
+		for (nb_led = 0; nb_led <3;nb_led++){
+			tab[32+nb_led*4]=0xff;
+			tab[33+nb_led*4]=0x00;
+			tab[34+nb_led*4]=0x3f;
+			tab[35+nb_led*4]=0xff;
+			}
+		}
+
+	
+void clignodroit(void)
+		{
+		int nb_led;
+        
+		for (nb_led = 0; nb_led <3;nb_led++){
 			tab[20+nb_led*4]=0xff;
 			tab[21+nb_led*4]=0x00;
 			tab[22+nb_led*4]=0x3f;
 			tab[23+nb_led*4]=0xff;
 			}
-	
-		// end
-		tab[45] = 0;
-		tab[44] = 0;
 		
-		//envoie de la trame
-		Driver_SPI1.Send(tab,46);
-	    
-  }
-}
-
-/* Configure and initialize PA1 pin as analog input pin for A/D conversion */
+		for (nb_led = 0; nb_led <3;nb_led++){
+			tab[32+nb_led*4]=0xff;
+			tab[33+nb_led*4]=0x00;
+			tab[34+nb_led*4]=0x00;
+			tab[35+nb_led*4]=0x00;
+			}
+		}
+/* Configuration and initialization PA1 pin as analog input pin for A/D conversion */
 void Configure_GPIO(void)
 {
 	GPIO_InitTypeDef ADCpin; //create an instance of GPIO_InitTypeDef C struct
