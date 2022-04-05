@@ -101,6 +101,7 @@ extern ARM_DRIVER_USART Driver_USART2;
 typedef struct {
 	char axeX;
 	char axeY;
+	char boutonZC;
 } maStruct;
 
 osThreadId ID_rNunchuk;
@@ -112,11 +113,12 @@ void rNunchuk(void const * argument)
 	int i;
 	/*uint8_t*/ char tab[1];
 	maStruct *ptr;
-	char data[6];
+	char data[3];
 	
 	while(1)
 		{
-			ptr = osMailAlloc(ID_NunchukToBT, 1000);
+			tab[0]=0x00;
+			ptr = osMailAlloc(ID_NunchukToBT, osWaitForever);
 			for (i=0;i<2;i++)
 				{
 					tab[0] = 0x00 + i;
@@ -125,16 +127,30 @@ void rNunchuk(void const * argument)
 					Driver_I2C1.MasterTransmit (SLAVE_I2C_ADDR, tab, 1, false);		// false = avec stop, axe X
 					while (Driver_I2C1.GetStatus().busy == 1);	// attente fin transmission
 					
-					osDelay(7);
+					osDelay(20);
 					// Lecture de data esclave : START + ADDR(R) + 1R_DATA + STOP
 				
 					Driver_I2C1.MasterReceive (SLAVE_I2C_ADDR, &data[i], 1, false);		// false = avec stop
 					while (Driver_I2C1.GetStatus().busy == 1); 	// attente fin transmission
-					osDelay(7);
-	   }
+					osDelay(50);
+				}
 				
+			tab[0]=0x05;
+			// Ecriture vers registre esclave : START + ADDR(W) + 1W_DATA + 1W_DATA + STOP
+			Driver_I2C1.MasterTransmit (SLAVE_I2C_ADDR, tab, 1, false);		// false = avec stop, axe X
+			while (Driver_I2C1.GetStatus().busy == 1);	// attente fin transmission
+					
+			osDelay(20);
+			// Lecture de data esclave : START + ADDR(R) + 1R_DATA + STOP
+				
+			Driver_I2C1.MasterReceive (SLAVE_I2C_ADDR, &data[2], 1, false);		// false = avec stop
+			while (Driver_I2C1.GetStatus().busy == 1); 	// attente fin transmission
+			osDelay(50);
+		
 				ptr -> axeX = data[0];
 				ptr -> axeY = data[1];
+				ptr -> boutonZC = data[2];
+				
 				osMailPut(ID_NunchukToBT, ptr);
 	}
 }
@@ -142,7 +158,7 @@ void rNunchuk(void const * argument)
 void sendBT(void const * argument)
 {
 	maStruct *ptr;
-	char exactData[6];
+	char exactData[3];
 	osEvent EVretourNun;
 	
 	while(1)
@@ -155,9 +171,10 @@ void sendBT(void const * argument)
 		
 			exactData[0] = ptr->axeX;
 			exactData[1] = ptr->axeY;
-			 
+		  exactData[2] = ((ptr->boutonZC) & 0x03)^0x03;
+		
 			while(Driver_USART2.GetStatus().tx_busy == 1); // attente buffer TX vide
-			Driver_USART2.Send(exactData,2);
+			Driver_USART2.Send(exactData,3);
 		
 			osMailFree(ID_NunchukToBT, ptr);
 	}
