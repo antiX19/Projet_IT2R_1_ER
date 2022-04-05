@@ -15,17 +15,21 @@ extern GLCD_FONT GLCD_Font_16x24;
 osThreadId  ID_receptionBT;
 
 void receptionBT (void const* argument){
-	uint8_t tab[50];
+	uint8_t tab[3];
 	char menu[30]={"Reception:"};
-	char text[50];
+	char text[50], text2[50];
 	
 	while(1) {
 		while(Driver_USART1.GetStatus().tx_busy == 1); // attente buffer TX vide
-		Driver_USART1.Receive(tab,2);
+		Driver_USART1.Receive(tab,3);
 		
 		sprintf(text,"valeurs: X=%2x, Y=%2x", tab[0], tab[1]);
+		sprintf(text2,"valeurs: ZC=%2x", tab[2]);
 		GLCD_DrawString(1,1*24, menu);
 		GLCD_DrawString(1,2*24, text);
+		GLCD_DrawString(1,3*24, text2);
+		
+		//osDelay(10);
 	}
 }
 
