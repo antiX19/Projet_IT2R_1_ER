@@ -878,18 +878,19 @@ ARM Macro Assembler    Page 14
               00000400 
               00000200 
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\startup_stm32f407xx.d -o.\objects\startup_stm32f407xx
-.o -I"U:\Projet IT2R\RTE" -I"U:\Projet IT2R\RTE\Device\STM32F407VGTx" -IC:\Keil
-_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\ARM\CMSIS
-\5.6.0\CMSIS\Driver\Include -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\RTOS\RT
-X\INC -IC:\Keil_v5\ARM\PACK\Keil\MDK-Middleware\7.0.0\Board -IC:\Keil_v5\ARM\PA
-CK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -IC:\Kei
-l_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.14.0\Drivers\STM32F4xx_HAL_Driver\Inc --pred
-efine="__RTX SETA 1" --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION
- SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.
-\listings\startup_stm32f407xx.lst RTE\Device\STM32F407VGTx\startup_stm32f407xx.
-s
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=.\objects\startup_stm32f407xx.d -o.\objects\startup_stm32f40
+7xx.o -I.\RTE\Device\STM32F407VGTx -I.\RTE\_Target_1 -IC:\Users\cleme\AppData\L
+ocal\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\cleme\AppData\Loca
+l\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Driver\Include -IC:\Users\cleme\AppData\Local
+\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\INC -IC:\Users\cleme\AppData\Local\Ar
+m\Packs\Keil\MDK-Middleware\7.13.0\Board -IC:\Users\cleme\AppData\Local\Arm\Pac
+ks\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -IC:\Use
+rs\cleme\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HA
+L_Driver\Inc --predefine="__RTX SETA 1" --predefine="__UVISION_VERSION SETA 536
+" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --predefine="_RTE
+_ SETA 1" --list=.\listings\startup_stm32f407xx.lst RTE\Device\STM32F407VGTx\st
+artup_stm32f407xx.s
 
 
 
@@ -1993,4 +1994,4 @@ Symbol: __use_two_region_memory
       None
 Comment: __use_two_region_memory unused
 3 symbols
-450 symbols in table
+449 symbols in table

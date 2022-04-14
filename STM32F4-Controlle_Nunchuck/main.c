@@ -127,12 +127,12 @@ void rNunchuk(void const * argument)
 					Driver_I2C1.MasterTransmit (SLAVE_I2C_ADDR, tab, 1, false);		// false = avec stop, axe X
 					while (Driver_I2C1.GetStatus().busy == 1);	// attente fin transmission
 					
-					osDelay(20);
+					//osDelay(1);
 					// Lecture de data esclave : START + ADDR(R) + 1R_DATA + STOP
 				
 					Driver_I2C1.MasterReceive (SLAVE_I2C_ADDR, &data[i], 1, false);		// false = avec stop
 					while (Driver_I2C1.GetStatus().busy == 1); 	// attente fin transmission
-					osDelay(50);
+					//osDelay(1);
 				}
 				
 			tab[0]=0x05;
@@ -140,12 +140,12 @@ void rNunchuk(void const * argument)
 			Driver_I2C1.MasterTransmit (SLAVE_I2C_ADDR, tab, 1, false);		// false = avec stop, axe X
 			while (Driver_I2C1.GetStatus().busy == 1);	// attente fin transmission
 					
-			osDelay(20);
+			//osDelay(1);
 			// Lecture de data esclave : START + ADDR(R) + 1R_DATA + STOP
 				
 			Driver_I2C1.MasterReceive (SLAVE_I2C_ADDR, &data[2], 1, false);		// false = avec stop
 			while (Driver_I2C1.GetStatus().busy == 1); 	// attente fin transmission
-			osDelay(50);
+			//osDelay(1);
 		
 				ptr -> axeX = data[0];
 				ptr -> axeY = data[1];
@@ -158,7 +158,7 @@ void rNunchuk(void const * argument)
 void sendBT(void const * argument)
 {
 	maStruct *ptr;
-	char exactData[3];
+	char exactData[5];
 	osEvent EVretourNun;
 	
 	while(1)
@@ -168,13 +168,14 @@ void sendBT(void const * argument)
 		
 			//exactData[0] = (ptr->axeX ^ 0x17) + 0x17;  //decode data nunchuck
 			//exactData[1] = (ptr->axeY ^ 0x17) + 0x17;  //decode data nunchuck
+			exactData[0] = 0x0F;
+			exactData[1] = 0xF0;
+			exactData[2] = ptr->axeX;
+			exactData[3] = ptr->axeY;
+		  exactData[4] = ((ptr->boutonZC) & 0x03)^0x03;
 		
-			exactData[0] = ptr->axeX;
-			exactData[1] = ptr->axeY;
-		  exactData[2] = ((ptr->boutonZC) & 0x03)^0x03;
-		
-			while(Driver_USART2.GetStatus().tx_busy == 1); // attente buffer TX vide
-			Driver_USART2.Send(exactData,3);
+			while(Driver_USART2.GetStatus().tx_busy == 6); // attente buffer TX vide
+			Driver_USART2.Send(exactData,5);
 		
 			osMailFree(ID_NunchukToBT, ptr);
 	}

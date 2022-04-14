@@ -18,3 +18,4 @@
 .\objects\main.o: C:\Users\cleme\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h
 .\objects\main.o: C:\Users\cleme\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include\system_LPC17xx.h
 .\objects\main.o: C:\Users\cleme\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\RTE_Driver\PIN_LPC17xx.h
+.\objects\main.o: Lib.h

@@ -1,8 +1,9 @@
 --cpu Cortex-M3
 ".\objects\main.o"
+".\objects\lib.o"
 ".\objects\glcd_fonts.o"
 ".\objects\glcd_mcb1700.o"
-"..\..\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\LIB\ARM\RTX_CM3.lib"
+"..\..\..\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\LIB\ARM\RTX_CM3.lib"
 ".\objects\rtx_conf_cm.o"
 ".\objects\ssp_lpc17xx.o"
 ".\objects\uart_lpc17xx.o"

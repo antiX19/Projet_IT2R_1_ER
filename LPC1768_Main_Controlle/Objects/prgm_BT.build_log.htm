@@ -21,26 +21,41 @@ Target DLL:      UL2CM3.DLL V1.164.0.0
 Dialog DLL:      TARMP1.DLL V1.26.0.0
  
 <h2>Project:</h2>
-C:\Users\cleme\Desktop\LPC1768_Main_Controlle\Main_Controlle.uvprojx
-Project File Date:  04/11/2022
+C:\Users\cleme\Desktop\Projet_IT2R_1_ER\LPC1768_Main_Controlle\Main_Controlle.uvprojx
+Project File Date:  04/12/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
 compiling GLCD_Fonts.c...
 compiling RTX_Conf_CM.c...
-compiling GPIO_LPC17xx.c...
-compiling GPDMA_LPC17xx.c...
 compiling main.c...
-compiling GLCD_MCB1700.c...
-compiling PIN_LPC17xx.c...
+Lib.h(6): warning:  #1-D: last line of file ends without a newline
+  void Init_Moteur(void);
+main.c(102): warning:  #177-D: variable "i"  was declared but never referenced
+  	int i;
+main.c(104): warning:  #177-D: variable "status"  was declared but never referenced
+  	uint32_t status;
+main.c(198): warning:  #177-D: variable "text"  was declared but never referenced
+  	char text[50];
+main.c(229): warning:  #177-D: variable "text"  was declared but never referenced
+  	char text[50];
+main.c: 5 warnings, 0 errors
+compiling Lib.c...
+Lib.c(59): warning:  #1-D: last line of file ends without a newline
+  }
+Lib.c: 1 warning, 0 errors
+compiling GPDMA_LPC17xx.c...
 compiling SSP_LPC17xx.c...
+compiling GLCD_MCB1700.c...
 assembling startup_LPC17xx.s...
+compiling GPIO_LPC17xx.c...
 compiling UART_LPC17xx.c...
+compiling PIN_LPC17xx.c...
 compiling system_LPC17xx.c...
 linking...
-Program Size: Code=22108 RO-data=7324 RW-data=116 ZI-data=3988  
-".\Objects\prgm_BT.axf" - 0 Error(s), 0 Warning(s).
+Program Size: Code=22548 RO-data=7300 RW-data=136 ZI-data=14784  
+".\Objects\prgm_BT.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -99,25 +114,25 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: ARM::CMSIS:RTOS:Keil RTX:4.82.0
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\main.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Mutex.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Timer.c
       Source file:   CMSIS\RTOS\RTX\Templates\RTX_Conf_CM.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MailQueue.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Semaphore.c
       Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MemPool.c
-      Include file:  CMSIS\RTOS\RTX\UserCodeTemplates\osObjects.h
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Thread.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MsgQueue.c
       Include file:  CMSIS\RTOS\RTX\INC\cmsis_os.h
-      Library file:  CMSIS\RTOS\RTX\LIB\ARM\RTX_CM3.lib
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Mutex.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Semaphore.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Thread.c
+      Include file:  CMSIS\RTOS\RTX\UserCodeTemplates\osObjects.h
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\main.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MailQueue.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MsgQueue.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Timer.c
       Source file:   CMSIS\RTOS\RTX\SRC\ARM\SVC_Table.s
+      Library file:  CMSIS\RTOS\RTX\LIB\ARM\RTX_CM3.lib
 
    * Component: Keil.MCB1700::Board Support:Graphic LCD:1.0.0
-      Source file:   Boards\Keil\MCB1700\Common\GLCD_MCB1700.c
-      Source file:   Boards\Keil\MCB1700\Common\GLCD_Fonts.c
       Include file:  Boards\Keil\MCB1700\Common\GLCD_Config.h
+      Source file:   Boards\Keil\MCB1700\Common\GLCD_MCB1700.c
       Include file:  Boards\Keil\MCB1700\Common\GLCD_Fonts.h
+      Source file:   Boards\Keil\MCB1700\Common\GLCD_Fonts.c
 
    * Component: Keil::CMSIS Driver:SPI:SSP:2.10.0
       Source file:   RTE_Driver\SSP_LPC17xx.c
@@ -130,19 +145,19 @@ Package Vendor: Keil
       Source file:   RTE_Driver\GPDMA_LPC17xx.c
 
    * Component: Keil::Device:GPIO:1.1.0
-      Include file:  RTE_Driver\GPIO_LPC17xx.h
       Source file:   RTE_Driver\GPIO_LPC17xx.c
+      Include file:  RTE_Driver\GPIO_LPC17xx.h
 
    * Component: Keil::Device:PIN:1.0.0
-      Include file:  RTE_Driver\PIN_LPC17xx.h
       Source file:   RTE_Driver\PIN_LPC17xx.c
+      Include file:  RTE_Driver\PIN_LPC17xx.h
 
    * Component: Keil::Device:Startup:1.0.0
-      Include file:  RTE_Driver\Config\RTE_Device.h
-      Source file:   Device\Source\ARM\startup_LPC17xx.s
       Include file:  Device\Include\LPC17xx.h
+      Source file:   Device\Source\ARM\startup_LPC17xx.s
       Source file:   Device\Source\system_LPC17xx.c
-Build Time Elapsed:  00:00:01
+      Include file:  RTE_Driver\Config\RTE_Device.h
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

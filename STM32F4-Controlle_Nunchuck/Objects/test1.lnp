@@ -1,8 +1,8 @@
---cpu Cortex-M4.fp
+--cpu=Cortex-M4.fp.sp
 ".\objects\main.o"
 ".\objects\buttons_f4discovery.o"
 ".\objects\led_f4discovery.o"
-"C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\RTOS\RTX\LIB\ARM\RTX_CM4.lib"
+"..\..\..\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\LIB\ARM\RTX_CM4.lib"
 ".\objects\rtx_conf_cm.o"
 ".\objects\i2c_stm32f4xx.o"
 ".\objects\usart_stm32f4xx.o"
@@ -20,6 +20,6 @@
 ".\objects\startup_stm32f407xx.o"
 ".\objects\system_stm32f4xx.o"
 --strict --scatter ".\Objects\test1.sct"
---summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\Listings\test1.map" -o .\Objects\test1.axf

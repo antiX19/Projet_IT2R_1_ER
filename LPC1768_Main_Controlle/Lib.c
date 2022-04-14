@@ -8,18 +8,7 @@ extern ARM_DRIVER_USART Driver_USART1;
 
 
 
-void Init_UART(void){
-	Driver_USART1.Initialize(NULL);
-	Driver_USART1.PowerControl(ARM_POWER_FULL);
-	Driver_USART1.Control(	ARM_USART_MODE_ASYNCHRONOUS |
-							ARM_USART_DATA_BITS_8		|
-							ARM_USART_STOP_BITS_1		|
-							ARM_USART_PARITY_NONE		|
-							ARM_USART_FLOW_CONTROL_NONE,
-							115200);
-	Driver_USART1.Control(ARM_USART_CONTROL_TX,1);
-	Driver_USART1.Control(ARM_USART_CONTROL_RX,1);
-}
+
 
 
 
@@ -32,7 +21,7 @@ void Init_Pwm(void){
 	// TC s'incrémente toutes les 480 ns
 	LPC_PWM1->PR = 0; // prescaler
 
-	LPC_PWM1->MR0 =1259; // Ceci ajuste la période de la PWM à 40 us
+	LPC_PWM1->MR0 = 999; // Ceci ajuste la période de la PWM à 40 us
 		
 
 		
@@ -52,8 +41,8 @@ void Init_TIM0(void){
 	LPC_GPIO3->FIOPIN3 |= 0x04;
 
 	LPC_SC->PCONP = LPC_SC->PCONP | 0x000000006;  //Enable TIM0
-	LPC_TIM0->PR = 8;
-	LPC_TIM0->MR0 = 55600;
+	LPC_TIM0->PR = 4;
+	LPC_TIM0->MR0 = 8344;
 	LPC_TIM0->MCR = LPC_TIM0->MCR | 0x00000003; //réglage RAZ
 	LPC_TIM0->TCR = 1 ;
 	

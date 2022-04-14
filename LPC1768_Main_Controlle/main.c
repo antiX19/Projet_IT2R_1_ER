@@ -21,32 +21,44 @@ extern GLCD_FONT GLCD_Font_16x24;
 extern ARM_DRIVER_USART Driver_USART1;
 
 
-void receptionBT (void const* argument);
+
 void PWM_Servo (void const * argument);
 void Pilotage (void const* argument);
 void TIMER0_IRQHandler(void);
 void Init_TIM0(void);
 void Moteur_AV(uint32_t vitesse);
 void Moteur_AR(uint32_t vitesse);
+void Callback_UART(uint32_t event);
+void Callback_BT(uint32_t 	event);
+void Reception_BT(void const* argument);
+void Error_BT(void const* argument);
 
 
-//VAL MIN = 3060
-//VAL MOY = 4172
-//VAL mAX = 5285
-uint8_t tab[3];
-uint32_t temps_haut = 3100;
+//VAL MIN = 5500
+//VAL MOY = 7500
+//VAL mAX = 9500
+
+
+uint8_t tab[6];
+uint32_t temps_haut = 9800;
+uint32_t temps_tot = 110200;
+bool TIMER = 1;
+bool Debug = 1;
+int test = 0;
+char first_val[1];
+bool verif = 1;
+int compteur = 0;
+
+
+
+osThreadId  ID_Pilotage,ID_Reception_BT,ID_Error_BT;
 
 
 
 
-osThreadId  ID_receptionBT,ID_Pilotage,ID_test;
-
-
-
-osThreadDef (receptionBT, osPriorityNormal, 1, 0);
 osThreadDef (Pilotage , osPriorityNormal, 1, 0);
-
-
+osThreadDef (Reception_BT , osPriorityNormal, 1, 0);
+osThreadDef (Error_BT , osPriorityNormal, 1, 0);
 
 
 
@@ -64,15 +76,12 @@ int main (void) {
 	Init_Moteur();
 	
 	
-
-	
-	Moteur_AV(20);
+	LPC_TIM0->MR0 = temps_haut;
 	
 
-
-	ID_receptionBT=osThreadCreate (osThread (receptionBT), NULL);
-	//ID_Pilotage=osThreadCreate (osThread (Pilotage), NULL);
-
+	ID_Pilotage=osThreadCreate (osThread (Pilotage), NULL);
+	ID_Reception_BT=osThreadCreate (osThread (Reception_BT), NULL);
+	ID_Error_BT=osThreadCreate (osThread (Error_BT), NULL);
 	
 	
   osKernelStart ();                         // start thread execution
@@ -87,35 +96,154 @@ int main (void) {
 
 
 
-void receptionBT (void const* argument){
-	char text[50];
-
-	while(1) {		
-
-		
-		while(Driver_USART1.GetStatus().tx_busy == 1); // attente buffer TX vide
-		Driver_USART1.Receive(tab,3);
-		
-		
-		GLCD_DrawString(1,1*24, "Reception :           ");
-		sprintf(text,"valeurs: X=%2x, Y=%2x", tab[0], tab[1]);
-		GLCD_DrawString(1,2*24, text);
-		sprintf(text,"valeurs: Z = %2x", tab[2]);
-		GLCD_DrawString(1,3*24, text);
-		//osSignalSet(ID_Pilotage,0x0001);
-		
-	}
-}
-
-
 
 
 void Pilotage (void const* argument){
-	while(1){
-		osSignalWait(0x0001,osWaitForever);	
-		osSignalSet(ID_receptionBT,0x0002);
+	int i;
+	char text[50];
+	uint32_t status;
+
+	int32_t vitesse_moteur;
+	
+	first_val[0] = 0xaa;
+	
+	while(1) {		
+		
+		
+		//174 val median
+		//X de 105 à 254
+		//Y de 105 a 255
+		
+		if (tab[0]>174){
+			temps_haut =  -25*tab[0] + 11850;
+		}
+		
+		else if (tab[0]<174){
+			temps_haut = -12*tab[0] + 9622;
+		}
+		
+		if (tab[1]>165){
+			vitesse_moteur = tab[1]-150;
+			if(vitesse_moteur < 1){vitesse_moteur = 0;} 
+			//if(vitesse_moteur > 100){vitesse_moteur = 100;}
+			Moteur_AR(vitesse_moteur);
+		}
+		
+		else if (tab[1]<140){
+			vitesse_moteur = 100-tab[1];
+			if(vitesse_moteur < 1){vitesse_moteur = 0;} 
+			//if(vitesse_moteur > 100){vitesse_moteur = 100;} 
+			Moteur_AV(vitesse_moteur);
+		}
+		else{
+			vitesse_moteur = 0;
+			Moteur_AV(vitesse_moteur);
+		}
+		
+		//sprintf(text,": t_haut = %4d", temps_haut);
+		//GLCD_DrawString(1,4*24, text);
+		
+		
+		/*
+		if (tab[1]>174){
+			vitesse_moteur = 1.25 * tab[1] - 217;
+			Moteur_AR(vitesse_moteur);
+		}
+		
+		else if (tab[1]<174){
+			vitesse_moteur = -0.6098*tab[1] + 106;
+			Moteur_AV(vitesse_moteur);
+		}*/
+		
+		
+		
+		if(Debug == 1){
+			
+			sprintf(text,"X = %3d               ", tab[0]);
+			GLCD_DrawString(1,1*24, text);
+			
+			sprintf(text,"Y = %3d", tab[1]);
+			GLCD_DrawString(1,2*24, text);
+			
+			sprintf(text,"ZC = %2d", tab[2]);
+			GLCD_DrawString(1,3*24, text);
+				
+			sprintf(text,"vm = %3d", vitesse_moteur);
+			GLCD_DrawString(1,5*24, text);
+		}
+		
+		
 	}
 }
+
+void Callback_BT(uint32_t 	event){
+
+	if(event == 2){
+		osSignalSet(ID_Reception_BT,0x0001);
+	}
+	
+	if(event == 32){
+		osSignalSet(ID_Error_BT,0x0002);
+	}
+
+	
+
+
+	
+	
+}
+
+void Reception_BT(void const* argument){
+	uint8_t tab_test[6];
+	char text[50];
+	int i;
+	
+	while(1){
+		
+		osSignalWait(0x0001,osWaitForever);
+		
+		for(i=0;i<5;i++){
+			tab_test[i] = 0x00;
+		}
+		
+		
+		
+		Driver_USART1.Receive(tab_test,6);
+		while(Driver_USART1.GetRxCount()<6);
+		if((tab_test[0] == 0x0F) & (tab_test[1] == 0xF0)){
+			tab[0] = tab_test[2];
+			tab[1] = tab_test[3];
+			tab[2] = tab_test[4];
+			
+		}
+		
+			
+		
+		
+		
+		
+	}
+}
+
+void Error_BT(void const* argument){
+	char text[50];
+	uint8_t poubelle[200];
+	int compteur2 = 0;
+	while(1){
+		
+		osSignalWait(0x0002,osWaitForever);
+
+
+		Driver_USART1.Receive(poubelle,200);
+		while(Driver_USART1.GetRxCount()<200);
+		compteur2++;
+	}
+	
+}
+
+
+
+
 
 
 
@@ -124,11 +252,14 @@ void Pilotage (void const* argument){
 void TIMER0_IRQHandler(void){
 	LPC_TIM0->IR = LPC_TIM0->IR  | (1<<0);
 	LPC_GPIO3->FIOPIN3 = LPC_GPIO3->FIOPIN3 ^ 0x04; //inverse l'état de P3,5
-	if(LPC_TIM0->MR0 == temps_haut){
-	 LPC_TIM0->MR0 = (55600-temps_haut);
+	
+	if(TIMER == 1){
+	 LPC_TIM0->MR0 = (temps_tot-temps_haut);
+		TIMER = 0;
 	}
-	else if(LPC_TIM0->MR0 != temps_haut){
+	else if(TIMER == 0){
 	 LPC_TIM0->MR0 = temps_haut;
+		TIMER = 1;
 	}
  }
 
@@ -158,3 +289,23 @@ void Moteur_AR(uint32_t vitesse)
 
 	
 }
+
+
+
+
+
+void Init_UART(void){
+	Driver_USART1.Initialize(Callback_BT);
+	Driver_USART1.PowerControl(ARM_POWER_FULL);
+	Driver_USART1.Control(	ARM_USART_MODE_ASYNCHRONOUS |
+							ARM_USART_DATA_BITS_8		|
+							ARM_USART_STOP_BITS_1		|
+							ARM_USART_PARITY_NONE		|
+							ARM_USART_FLOW_CONTROL_NONE,
+							115200);
+	Driver_USART1.Control(ARM_USART_CONTROL_TX,1);
+	Driver_USART1.Control(ARM_USART_CONTROL_RX,1);
+}
+
+
+
