@@ -63,7 +63,16 @@ osThreadDef(PING_AR, osPriorityNormal, 1, 1);
 //Pour l'envoi avec le bus can
 osThreadId  ID_CANthreadT;
 osThreadDef(CANthreadT, osPriorityNormal, 1, 1);
+
+capt_i2c captAv_i2c[3] = {
+		{SLAVE_I2C_ADDR_AVD,0},
+		{SLAVE_I2C_ADDR_AVM,0},
+		{SLAVE_I2C_ADDR_AVG,0},
+	};
+
 /*******CODE*I2C*PING********/
+
+
 
 // Id du bus can des us
 #define ID_Capteur_US			0x008
@@ -123,6 +132,7 @@ int main(void){
 	/*******CODE*I2C*PING********/
 	//Initialisation de la lisaison I2C
 	Init_I2C();
+	Init_Can();
 	//Pour l'avant
 	ID_tache_PING_AV = osThreadCreate(osThread(PING_AV), NULL ) ;
 	//Pour l'arrière
@@ -140,11 +150,7 @@ void PING_AV (void const* argument){
 	unsigned char highByte, lowByte;
 	unsigned short distance;
 	int i;
-	capt_i2c captAv_i2c[3] = {
-		{SLAVE_I2C_ADDR_AVD,0},
-		{SLAVE_I2C_ADDR_AVM,0},
-		{SLAVE_I2C_ADDR_AVG,0},
-	};
+	
 	
 	while(1){
 		for(i=0; i < 3; i++){
@@ -166,11 +172,6 @@ void PING_AR (void const* argument){
 	unsigned char highByte, lowByte;
 	unsigned short distance;
 	int i;
-	capt_i2c captAv_i2c[3] = {
-		{SLAVE_I2C_ADDR_ARD,0},
-		{SLAVE_I2C_ADDR_ARG,0},
-		{SLAVE_I2C_ADDR_ARPARKING,0},
-	};
 	
 	while(1){
 		for(i=0; i < 3; i++){
@@ -185,6 +186,7 @@ void PING_AR (void const* argument){
 			distance = ((short)highByte << 8) | lowByte;
 			captAv_i2c[i].dist = distance;
 		}
+		osSignalSet(ID_CANthreadT,0x0001);
 	}
 }
 
@@ -194,29 +196,23 @@ void CANthreadT(void const *argument)
 	ARM_CAN_MSG_INFO                tx_msg_info;
 	char data_buf[8],*ptr;
 	int i;
-	
-		capt_i2c captAv_i2c[3] = {
-		{SLAVE_I2C_ADDR_AVD,0},
-		{SLAVE_I2C_ADDR_AVM,0},
-		{SLAVE_I2C_ADDR_AVG,0},
-	};
 	while (1) 
 		{
+		/* Sommeil sur fin envoi */
+		osSignalWait(0x0001, osWaitForever);
 		tx_msg_info.id  = ARM_CAN_STANDARD_ID(ID_Capteur_US	);           // ID CAN exemple
 		tx_msg_info.rtr = 0;// 0 = trame DATA
 		for(i = 0; i < 8; i++)data_buf[i]=0;	
-		data_buf[0] = (char)(captAv_i2c[0].dist&0x00FF) ;// low byte
-		data_buf[1] = (char)(captAv_i2c[0].dist>>8);//high byte	
-		data_buf[2] = (char)(captAv_i2c[1].dist&0x00FF) ;// low byte;
-		data_buf[3] = (char)(captAv_i2c[1].dist>>8);//high byte	
-		data_buf[4] = (char)(captAv_i2c[2].dist&0x00FF) ;// low byte;	
-		data_buf[5] = (char)(captAv_i2c[2].dist>>8);//high byte	
+		data_buf[0] = (char)(captAv_i2c[0].dist|0x00);// low byte
+		data_buf[1] = (char)((captAv_i2c[0].dist>>8)|0x00);//high byte	
+		data_buf[2] = (char)(captAv_i2c[1].dist|0x00);// low byte;
+		data_buf[3] = (char)((captAv_i2c[0].dist>>8)|0x00);//high byte	
+		data_buf[4] = (char)(captAv_i2c[2].dist|0x00);// low byte;	
+		data_buf[5] = (char)((captAv_i2c[0].dist>>8)|0x00);//high byte	
 
 			
 		Driver_CAN2.MessageSend(2, &tx_msg_info, data_buf, 6); // envoi
-		/* Sommeil sur fin envoi */
-		osSignalWait(0x01, osWaitForever);
-		osDelay(100);
+
 		}
 }	
 
