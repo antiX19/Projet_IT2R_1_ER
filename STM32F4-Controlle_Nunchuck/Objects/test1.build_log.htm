@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.36.0.0
 Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Clément Loiseau, pyandco, LIC=D0D7S-LX30H-UH28H-WRKM2-FV8YC-H81JR
+License Information: Clément Loiseau, pyandco, LIC=21E4T-RU2E1-2ZIW4-F7ETW-57IG4-AHRS7
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
@@ -29,9 +29,6 @@ Project File Date:  04/12/2022
 Rebuild target 'Target 1'
 compiling RTX_Conf_CM.c...
 compiling LED_F4Discovery.c...
-compiling stm32f4xx_hal.c...
-compiling Buttons_F4Discovery.c...
-compiling stm32f4xx_hal_cortex.c...
 compiling main.c...
 main.c(127): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "const uint8_t *"
   					Driver_I2C1.MasterTransmit (SLAVE_I2C_ADDR, tab, 1, false);		// false = avec stop, axe X
@@ -42,21 +39,24 @@ main.c(140): warning:  #167-D: argument of type "char *" is incompatible with pa
 main.c(146): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
   			Driver_I2C1.MasterReceive (SLAVE_I2C_ADDR, &data[2], 1, false);		// false = avec stop
 main.c: 4 warnings, 0 errors
+compiling stm32f4xx_hal_cortex.c...
+compiling Buttons_F4Discovery.c...
+compiling stm32f4xx_hal.c...
 compiling stm32f4xx_hal_dma.c...
 compiling I2C_STM32F4xx.c...
 compiling USART_STM32F4xx.c...
-compiling stm32f4xx_hal_pwr_ex.c...
 compiling stm32f4xx_hal_gpio.c...
 assembling startup_stm32f407xx.s...
 compiling stm32f4xx_hal_pwr.c...
+compiling stm32f4xx_hal_pwr_ex.c...
 compiling stm32f4xx_hal_dma_ex.c...
+compiling stm32f4xx_hal_rcc.c...
 compiling stm32f4xx_hal_rcc_ex.c...
 compiling stm32f4xx_hal_usart.c...
 compiling stm32f4xx_hal_i2c.c...
-compiling stm32f4xx_hal_rcc.c...
 compiling system_stm32f4xx.c...
 linking...
-Program Size: Code=23876 RO-data=844 RW-data=96 ZI-data=17488  
+Program Size: Code=23884 RO-data=844 RW-data=96 ZI-data=17488  
 ".\Objects\test1.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
@@ -131,16 +131,16 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:RTOS:Keil RTX:4.82.0
       Include file:  CMSIS\RTOS\RTX\INC\cmsis_os.h
       Source file:   CMSIS\RTOS\RTX\Templates\RTX_Conf_CM.c
-      Include file:  CMSIS\RTOS\RTX\UserCodeTemplates\osObjects.h
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\main.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Mutex.c
       Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MailQueue.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MemPool.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MsgQueue.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Semaphore.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Thread.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\main.c
       Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Timer.c
       Source file:   CMSIS\RTOS\RTX\SRC\ARM\SVC_Table.s
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Semaphore.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Mutex.c
-      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Thread.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MsgQueue.c
+      Include file:  CMSIS\RTOS\RTX\UserCodeTemplates\osObjects.h
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MemPool.c
       Library file:  CMSIS\RTOS\RTX\LIB\ARM\RTX_CM4.lib
 
    * Component: Keil.STM32F4-Discovery::Board Support:Buttons:2.0.0
@@ -156,19 +156,19 @@ Package Vendor: Keil
       Source file:   CMSIS\Driver\USART_STM32F4xx.c
 
    * Component: Keil::Device:STM32Cube Framework:Classic:1.7.13
-      Include file:  MDK\Templates_LL\Inc\main.h
       Include file:  CMSIS\Driver\Config\RTE_Device.h
       Include file:  MDK\Templates\Inc\stm32f4xx_hal_conf.h
       Source file:   MDK\Templates\Src\stm32f4xx_hal_msp.c
-      Source file:   MDK\Templates\Src\stm32f4xx_it.c
-      Source file:   MDK\Templates\Src\main.c
       Include file:  MDK\Templates\Inc\stm32f4xx_it.h
+      Source file:   MDK\Templates\Src\stm32f4xx_it.c
       Include file:  MDK\Templates\Inc\main.h
+      Source file:   MDK\Templates\Src\main.c
+      Include file:  MDK\Templates_LL\Inc\main.h
       Source file:   MDK\Templates_LL\Src\main.c
 
    * Component: Keil::Device:STM32Cube HAL:Common:1.7.13
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c
       Include file:  Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h
+      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c
 
    * Component: Keil::Device:STM32Cube HAL:Cortex:1.7.13
       Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c
@@ -184,8 +184,8 @@ Package Vendor: Keil
       Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c
 
    * Component: Keil::Device:STM32Cube HAL:PWR:1.7.13
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c
       Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c
+      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c
 
    * Component: Keil::Device:STM32Cube HAL:RCC:1.7.13
       Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c
@@ -196,11 +196,11 @@ Package Vendor: Keil
 
    * Component: Keil::Device:Startup:2.6.3
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s
-      Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
-      Source file:   MDK\Device\Source\ARM\STM32F40xxx_41xxx_OPT.s
       Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
+      Source file:   MDK\Device\Source\ARM\STM32F40xxx_41xxx_OPT.s
+      Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
-Build Time Elapsed:  00:00:22
+Build Time Elapsed:  00:00:23
 </pre>
 </body>
 </html>

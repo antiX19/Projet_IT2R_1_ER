@@ -145,7 +145,7 @@ void rNunchuk(void const * argument)
 				
 			Driver_I2C1.MasterReceive (SLAVE_I2C_ADDR, &data[2], 1, false);		// false = avec stop
 			while (Driver_I2C1.GetStatus().busy == 1); 	// attente fin transmission
-			//osDelay(1);
+			osDelay(50);
 		
 				ptr -> axeX = data[0];
 				ptr -> axeY = data[1];
