@@ -43,7 +43,7 @@ uint8_t tab[6];
 uint32_t temps_haut = 9800;
 uint32_t temps_tot = 110200;
 bool TIMER = 1;
-bool Debug = 1;
+bool Debug = 0;
 int test = 0;
 char first_val[1];
 bool verif = 1;
@@ -214,6 +214,14 @@ void Reception_BT(void const* argument){
 			tab[0] = tab_test[2];
 			tab[1] = tab_test[3];
 			tab[2] = tab_test[4];
+			sprintf(text,"X = %3d               ", tab[0]);
+			GLCD_DrawString(1,1*24, text);
+			
+			sprintf(text,"Y = %3d", tab[1]);
+			GLCD_DrawString(1,2*24, text);
+			
+			sprintf(text,"ZC = %3d", tab[2]);
+			GLCD_DrawString(1,3*24, text);
 			
 		}
 		
@@ -271,7 +279,7 @@ void Moteur_AV(uint32_t vitesse)
 	//LPC_GPIO0->FIOPIN2 = LPC_GPIO0->FIOPIN2 & 0xFC; // mets INA à 0
 	LPC_GPIO0->FIOPIN2 = 0x0D; // mets INA à 0
 	vit = vitesse *10;
-	LPC_PWM1->MR2 = 100;
+	//LPC_PWM1->MR2 = 100;
 	LPC_PWM1->MR2 = vit;// ceci ajuste la duree de l'état haut
 
 	
@@ -284,7 +292,7 @@ void Moteur_AR(uint32_t vitesse)
 	LPC_GPIO0->FIOPIN2 = 0x0E; // mets INA à 0
 	
 	vit = vitesse *10;
-	LPC_PWM1->MR2 = 100;
+	//LPC_PWM1->MR2 = 100;
 	LPC_PWM1->MR2 = vit;// ceci ajuste la duree de l'état haut
 
 	
